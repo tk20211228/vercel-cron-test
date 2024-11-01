@@ -5,10 +5,6 @@ import { Loader2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-interface SubmitButtonProps {
-  onSubmit: () => Promise<string | void>;
-}
-
 export default function SubmitButton() {
   const [isPending, startTransition] = useTransition();
 
