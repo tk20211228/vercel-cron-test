@@ -10,23 +10,38 @@ interface SubmitButtonProps {
   onSubmit: () => Promise<string | void>;
 }
 
-export default function SubmitButton({ onSubmit }: SubmitButtonProps) {
-  const { pending } = useFormStatus();
+export default function SubmitButton() {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
     startTransition(async () => {
-      const result = await onSubmit().catch((error) => {
-        toast.error(error.message); // エラー時の通知
-      });
-      if (result) {
-        toast.success(result); // resultが文字列の場合のみ表示
-      } // 成功時の通知
+      try {
+        // 環境に応じたベースURLの構築
+        const protocol = window.location.protocol;
+        const host = window.location.host;
+        const baseUrl = `${protocol}//${host}`;
+
+        const res = await fetch(`${baseUrl}/api/`, {
+          method: "GET",
+        });
+
+        console.log(res);
+
+        if (!res.ok) {
+          throw new Error("APIリクエストに失敗しました");
+        }
+
+        toast.success("APIリクエストが成功しました");
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "エラーが発生しました"
+        );
+      }
     });
   };
   return (
-    <Button disabled={pending || isPending} onClick={handleClick}>
-      {pending || isPending ? (
+    <Button disabled={isPending} onClick={handleClick}>
+      {isPending ? (
         <>
           <Loader2 size={16} className="animate-spin" />
           実行中...

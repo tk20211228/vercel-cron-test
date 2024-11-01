@@ -55,7 +55,6 @@ export async function GET(request: Request) {
     // discordに通知
     if (webhookUrl) {
       const res = await sendDiscordNotification(webhookUrl, message);
-      console.log(res);
     }
   } catch (error) {
     console.error(error);
