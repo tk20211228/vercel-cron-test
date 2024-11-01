@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Image from "next/image";
 import SubmitButton from "./components/submit-button";
 
